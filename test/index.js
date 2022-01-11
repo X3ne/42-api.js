@@ -7,6 +7,6 @@ client.GetToken().then(function (token) {
     console.log(token);
 });
 
-client.GetUserCursus("tjolivet").then((data) => {
+client.GetUserCursus('tjolivet').then((data) => {
     console.log(data);
 });

@@ -12,7 +12,6 @@ class Client {
         this.clientSecret = options.clientSecret;
     };
 
-
     GenerateToken() {
         return queue.addToQueue({
             "value": this._GenerateToken.bind(this),
