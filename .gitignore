@@ -1,0 +1,4 @@
+pnpm-lock.yalm
+.node-persist
+node_modules/
+.env
