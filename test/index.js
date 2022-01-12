@@ -7,6 +7,14 @@ client.GetToken().then(function (token) {
     console.log(token);
 });
 
-client.GetUserCursus('tjolivet').then((data) => {
-    console.log(data);
-});
+// client.GetUserCursus('tjolivet').then((data) => {
+//     console.log(data);
+// });
+
+// client.GetUsers({"filter[login]": 'tjolivet'}).then((data) => {
+//     console.log(data);
+// });
+
+// client.GetCoalitions().then((data) => {
+//     console.log(data);
+// });

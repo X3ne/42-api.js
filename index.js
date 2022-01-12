@@ -2,6 +2,8 @@ const superagent = require('superagent');
 const Queuing = require('./queue');
 const { storeToken, getToken } = require('./token');
 const Users = require('./bin/User/user');
+const Campus = require('./bin/Campus/campus');
+const Coalitions = require('./bin/Coalitions/coalitions');
 const queue = new Queuing();
 
 const ApiUrl = 'https://api.intra.42.fr'
@@ -26,17 +28,38 @@ class Client {
         });
     }
 
-    GetUserLocationStats(login) {
+    GetUserLocationStats(login, params) {
         return queue.addToQueue({
             "value": Users._GetUserLocationStats.bind(this),
-            "args": [login, ApiUrl]
+            "args": [login, ApiUrl, params]
         });
     }
 
-    GetUserCursus(login) {
+    GetUsers(params) {
+        return queue.addToQueue({
+            "value": Users._GetUsers.bind(this),
+            "args": [ApiUrl, params]
+        });
+    }
+
+    GetUserCursus(login, params) {
         return queue.addToQueue({
             "value": Users._GetUserCursus.bind(this),
-            "args": [login, ApiUrl]
+            "args": [login, ApiUrl, params]
+        });
+    }
+
+    GetCampus(id, params) {
+        return queue.addToQueue({
+            "value": Campus._GetCampus.bind(this),
+            "args": [ApiUrl, id, params]
+        });
+    }
+
+    GetCoalitions(params) {
+        return queue.addToQueue({
+            "value": Coalitions._GetCoalitions.bind(this),
+            "args": [ApiUrl, params]
         });
     }
 
