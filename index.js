@@ -1,6 +1,6 @@
 const superagent = require('superagent');
 const Queuing = require('./queue');
-const { storeToken, getToken } = require('./token');
+const { storeToken, getToken } = require('./utils');
 const Users = require('./bin/User/user');
 const Campus = require('./bin/Campus/campus');
 const Coalitions = require('./bin/Coalitions/coalitions');
@@ -24,7 +24,14 @@ class Client {
     GetToken() {
         return queue.addToQueue({
             "value": this._GetToken.bind(this),
-            "args": []
+            "args": [this.clientId, this.clientSecret]
+        });
+    }
+
+    RefreshToken() {
+        return queue.addToQueue({
+            "value": this._RefreshToken.bind(this),
+            "args": [ApiUrl]
         });
     }
 
@@ -64,34 +71,44 @@ class Client {
     }
 
     async _GenerateToken(clientId, clientSecret) {
-        return new Promise((resolve, reject) => {
-            try {
-                superagent
-                    .post(`${ApiUrl}/oauth/token`)
-                    .send(`grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`)
-                    .set('accept', 'json')
-                    .end((err, res) => {
-                        let tokenData = JSON.parse(res.text);
-                        if (tokenData.error) return console.error(tokenData.error_description);
-                        console.log(`New token: ${tokenData.access_token}`);
-                        storeToken(tokenData);
-                        resolve(tokenData);
-                    });
-            } catch (e) {
-                reject(e);
-            }
+        return new Promise(async (resolve, reject) => {
+            superagent
+                .post(`${ApiUrl}/oauth/token`)
+                .send(`grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`)
+                .set('accept', 'json')
+                .end(async (err, res) => {
+                    let tokenData = JSON.parse(res.text);
+                    if (tokenData.error) return resolve({ 'error': tokenData.error_description });
+                    await storeToken(tokenData);
+                    resolve(tokenData.access_token);
+                });
         });
     }
 
     async _GetToken() {
-        return new Promise((resolve, reject) => {
-            try {
-                getToken().then((token) => {
+        return new Promise(async (resolve, reject) => {
+            let token = await getToken();
+            if (!token)
+                token = await this._GenerateToken(this.clientId, this.clientSecret);
+            resolve(token);
+        });
+    }
+
+    async _RefreshToken(url) {
+        return new Promise(async (resolve, reject) => {
+            const token = await this._GetToken();
+            superagent
+                .get(`${url}/oauth/token/info`)
+                .set({'Authorization': `Bearer ${token}`})
+                .set('accept', 'json')
+                .end(async (err, res) => {
+                    if (res.body.error)
+                    {
+                        const genToken = await this._GenerateToken(this.clientId, this.clientSecret)
+                        return resolve(genToken);
+                    }
                     resolve(token);
                 });
-            } catch (e) {
-                reject(e);
-            }
         });
     }
 }

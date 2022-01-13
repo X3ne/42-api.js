@@ -1,6 +1,5 @@
 const storage = require('node-persist');
 
-
 async function storeToken(token) {
     await storage.init();
     await storage.setItem('token', token.access_token);
@@ -8,9 +7,7 @@ async function storeToken(token) {
 
 async function getToken() {
     await storage.init();
-    await storage.getItem('token').then((data) => {
-        token = data;
-    });
+    const token = await storage.getItem('token');
     return token;
 }
 
