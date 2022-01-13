@@ -102,7 +102,7 @@ class Client {
                 .set({'Authorization': `Bearer ${token}`})
                 .set('accept', 'json')
                 .end(async (err, res) => {
-                    if (res.body.error)
+                    if (res.body.error || err)
                     {
                         const genToken = await this._GenerateToken(this.clientId, this.clientSecret)
                         return resolve(genToken);

@@ -42,7 +42,6 @@ async function GetData() {
     const validity = await client.RefreshToken();
     console.log(validity);
 
-
     const users = await client.GetUsers({"filter[login]": 'login'});
     console.log(users);
 
