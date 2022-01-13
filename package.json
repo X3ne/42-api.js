@@ -1,5 +1,5 @@
 {
-  "name": "42.js",
+  "name": "@x3ne/42.js",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,6 +12,13 @@
     "javascript"
   ],
   "author": "X3ne",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/X3ne/42.js.git"
+  },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  },
   "license": "MIT",
   "dependencies": {
     "node-persist": "^3.1.0",
