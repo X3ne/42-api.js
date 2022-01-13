@@ -1,9 +1,9 @@
 const superagent = require('superagent');
-const Queuing = require('./queue');
-const { storeToken, getToken } = require('./utils');
-const Users = require('./bin/User/user');
-const Campus = require('./bin/Campus/campus');
-const Coalitions = require('./bin/Coalitions/coalitions');
+const Queuing = require('./lib/queue');
+const { storeToken, getToken } = require('./lib/utils');
+const Users = require('./lib/User/user');
+const Campus = require('./lib/Campus/campus');
+const Coalitions = require('./lib/Coalitions/coalitions');
 const queue = new Queuing();
 
 const ApiUrl = 'https://api.intra.42.fr'
