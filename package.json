@@ -1,5 +1,5 @@
 {
-  "name": "@x3ne/42.js",
+  "name": "42.js",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,9 +15,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/X3ne/42.js.git"
-  },
-  "publishConfig": {
-    "registry":"https://npm.pkg.github.com"
   },
   "license": "MIT",
   "dependencies": {
