@@ -1,6 +1,6 @@
 {
-  "name": "42api.js",
-  "version": "1.0.0",
+  "name": "42.js",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {

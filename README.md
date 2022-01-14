@@ -36,9 +36,6 @@ async function GetData() {
     const newToken = await client.GenerateToken();
     console.log(newToken);
 
-    const token = await client.GetToken();
-    console.log(token);
-
     const validity = await client.RefreshToken();
     console.log(validity);
 
@@ -67,10 +64,6 @@ client.GetToken().then((data) => {
 });
 
 client.GenerateToken().then((data) => {
-    console.log(data);
-});
-
-client.GetToken().then((data) => {
     console.log(data);
 });
 
