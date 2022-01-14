@@ -16,16 +16,16 @@
 
 ## Install
 ```sh
-npm install 42.js
+npm install 42-api.js
 ```
 ```sh
-pnpm install 42.js
+pnpm install 42-api.js
 ```
 
 ## Usage
 
 ```js
-const Api42 = require('42.js');
+const Api42 = require('42-api.js');
 
 const client = new Api42({ clientId: client_id, clientSecret: client_secret });
 
@@ -55,7 +55,7 @@ GetData();
 ```
 ### Or
 ```js
-const Api42 = require('42.js');
+const Api42 = require('42-api.js');
 
 const client = new Api42({ clientId: client_id, clientSecret: client_secret });
 
