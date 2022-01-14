@@ -6,7 +6,7 @@ const Campus = require('./lib/Campus/campus');
 const Coalitions = require('./lib/Coalitions/coalitions');
 const queue = new Queuing();
 
-const ApiUrl = 'https://api.intra.42.fr'
+const ApiUrl = 'https://api.intra.42.fr';
 
 class Client {
     constructor(options) {
