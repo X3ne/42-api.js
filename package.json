@@ -1,6 +1,6 @@
 {
   "name": "42-api.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An small npm module to fetch the 42 api",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,9 @@
   "keywords": [
     "42",
     "js",
-    "javascript"
+    "fetch-api",
+    "42born2code",
+    "42school"
   ],
   "author": "X3ne",
   "repository": {
@@ -18,7 +20,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "node-persist": "^3.1.0",
     "superagent": "7.0.2"
   },
   "devDependencies": {
