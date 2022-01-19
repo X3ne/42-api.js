@@ -1,6 +1,5 @@
 const superagent = require('superagent');
 const Queuing = require('./lib/queue');
-const { storeToken, getToken } = require('./lib/utils');
 const Users = require('./lib/User/user');
 const Campus = require('./lib/Campus/campus');
 const Coalitions = require('./lib/Coalitions/coalitions');
@@ -10,6 +9,8 @@ const ApiUrl = 'https://api.intra.42.fr';
 
 class Client {
     constructor(options) {
+        if (!options.clientId) throw new Error('Client Id is required');
+        if (!options.clientSecret) throw new Error('Client Secret is required');
         this.clientId = options.clientId;
         this.clientSecret = options.clientSecret;
     };
@@ -31,7 +32,7 @@ class Client {
     RefreshToken() {
         return queue.addToQueue({
             "value": this._RefreshToken.bind(this),
-            "args": [ApiUrl]
+            "args": []
         });
     }
 
@@ -77,37 +78,40 @@ class Client {
                 .send(`grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`)
                 .set('accept', 'json')
                 .end(async (err, res) => {
+                    if (res.statusCode != 200) return resolve({
+                        'error': res.status,
+                        'message': res.text
+                    });
                     let tokenData = JSON.parse(res.text);
                     if (tokenData.error) return resolve({ 'error': tokenData.error_description });
-                    await storeToken(tokenData);
-                    resolve(tokenData.access_token);
+                    this.token = tokenData;
+                    resolve(this.token);
                 });
         });
     }
 
     async _GetToken() {
         return new Promise(async (resolve, reject) => {
-            let token = await getToken();
-            if (!token)
-                token = await this._GenerateToken(this.clientId, this.clientSecret);
-            resolve(token);
+            if (!this.token)
+            this.token = await this._GenerateToken(this.clientId, this.clientSecret);
+            resolve(this.token);
         });
     }
 
-    async _RefreshToken(url) {
+    async _RefreshToken() {
         return new Promise(async (resolve, reject) => {
-            const token = await this._GetToken();
+            if (!this.token)
+                await this._GenerateToken(this.clientId, this.clientSecret);
             superagent
-                .get(`${url}/oauth/token/info`)
-                .set({'Authorization': `Bearer ${token}`})
+                .get(`${ApiUrl}/oauth/token/info`)
+                .set({'Authorization': `Bearer ${this.token.access_token}`})
                 .set('accept', 'json')
                 .end(async (err, res) => {
-                    if (res.body.error || err)
-                    {
-                        const genToken = await this._GenerateToken(this.clientId, this.clientSecret)
-                        return resolve(genToken);
+                    if (err || res.body.error) {
+                        console.log('Refreshing Token');
+                        this.token = await this._GenerateToken(this.clientId, this.clientSecret);
                     }
-                    resolve(token);
+                    resolve(this.token);
                 });
         });
     }

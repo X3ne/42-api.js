@@ -1,5 +1,4 @@
 pnpm-lock.yaml
-.node-persist
 node_modules/
 .env
 test/
